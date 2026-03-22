@@ -3,7 +3,6 @@ using EquipmentRental.Models;
 
 namespace EquipmentRental.Services;
 
-// Stub — business logic will be added in upcoming commits
 public class RentalService : IRentalService
 {
     private readonly List<User> _users = new();

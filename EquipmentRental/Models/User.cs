@@ -8,7 +8,6 @@ public abstract class User
 
     public string FullName => $"{FirstName} {LastName}";
 
-    // To be defined in subclasses
     public abstract int MaxRentals { get; }
     public abstract string UserType { get; }
 }
