@@ -1,6 +1,6 @@
 # EquipmentRental
 
-University equipment rental system.
+University equipment rental system
 
 ## How to run
 ```bash
@@ -26,15 +26,15 @@ EquipmentRental/
 ├── Config/
 │   └── RentalPolicy.cs     # Penalty rate and default rental duration
 ├── Data/
-│   └── DataStore.cs        # Centralized in-memory data storage
+│   └── DataStore.cs        # Centralized in-memory storage with JSON save/load
 ├── UI/
 │   └── ConsoleUI.cs        # Console output helpers
-└── Program.cs              # Demo scenario (14 steps)
+└── Program.cs              # Demo scenario (15 steps)
 ```
 
 ## Demo scenario
 
-The demo in `Program.cs` covers 14 steps:
+The demo in `Program.cs` covers 15 steps:
 
 1. Adding equipment of three types (Laptop, Projector, Camera)
 2. Adding users of two types (Student, Employee)
@@ -50,14 +50,15 @@ The demo in `Program.cs` covers 14 steps:
 12. Simulated overdue rental
 13. Summary report
 14. Full rental history
+15. Saving data to JSON file
 
 ## Design decisions
 
 ### Separation of responsibilities
-Each class has one clear job. `RentalService` handles all business logic — registering users and equipment, renting, returning, calculating penalties, generating reports. `Program.cs` only drives the demo. `ConsoleUI` only handles output formatting. `DataStore` holds the in-memory state. Models hold data only — the only logic in models is `IsActive` and `IsOverdue()` which depend purely on the model's own fields.
+Each class has one clear job. `RentalService` handles all business logic. `Program.cs` only drives the demo. `ConsoleUI` only handles output formatting. `DataStore` holds the in-memory state and manages persistence. Models hold data only — the only logic in models is `IsActive` and `IsOverdue()` which depend purely on the model's own fields.
 
-### DataStore
-`DataStore` is a static class that acts as a centralized in-memory data container. `RentalService` references its lists directly, which means the data is shared and accessible from one place. This makes it easy to extend later — for example, replacing `DataStore` with a database context requires changes only in `RentalService`, not across the whole application.
+### DataStore and JSON persistence
+`DataStore` is a static class that acts as a centralized in-memory data container. `RentalService` references its lists directly. On startup `DataStore.Load()` reads `data.json` if it exists. At the end of the demo `DataStore.Save()` writes the current state to `data.json`. Polymorphic types (`User`, `Equipment`) are handled via custom `JsonConverter` implementations so that subtypes (`Student`, `Employee`, `Laptop`, etc.) survive serialization and deserialization correctly.
 
 ### Inheritance
 `Equipment` and `User` are abstract base classes because the domain genuinely has shared data and type-specific fields. `Laptop`, `Projector`, `Camera`, `Student`, `Employee` extend them. Inheritance follows from the domain, not from a desire to use it artificially.
@@ -69,7 +70,7 @@ Each class has one clear job. `RentalService` handles all business logic — reg
 `RentalPolicy` holds the penalty rate and default rental duration as constants — one place to change if the rules change. Rental limits (`MaxRentals`) live in each user subclass, so adding a new user type with a different limit requires no changes to `RentalService`.
 
 ### Cohesion
-Each class is focused on one thing. `ConsoleUI` knows nothing about rentals. `RentalService` knows nothing about the console. `RentalPolicy` is just constants. `DataStore` is just data. This makes each part easy to read and change independently.
+Each class is focused on one thing. `ConsoleUI` knows nothing about rentals. `RentalService` knows nothing about the console. `RentalPolicy` is just constants. `DataStore` handles only data storage and persistence.
 
 ### Coupling
 `RentalService` does not depend on `ConsoleUI` or `Program.cs`. The console layer depends on the service, not the other way around.
