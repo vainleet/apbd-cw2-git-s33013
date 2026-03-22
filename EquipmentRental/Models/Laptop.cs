@@ -1,0 +1,9 @@
+namespace EquipmentRental.Models;
+
+public class Laptop : Equipment
+{
+    public int RamGb { get; set; }
+    public string Cpu { get; set; } = string.Empty;
+
+    public override string TypeLabel => "Laptop";
+}
