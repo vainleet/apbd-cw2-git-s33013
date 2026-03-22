@@ -1,6 +1,6 @@
 # EquipmentRental
 
-University equipment rental system — APBD Tutorial 2 (C#).
+University equipment rental system
 
 ## Status
 
@@ -10,12 +10,12 @@ Work in progress. Domain model defined, service layer in progress.
 
 ```
 EquipmentRental/
-├── Models/         # Domain entities (Equipment, User, Rental, subtypes)
+├── Models/         # Domain entities
 ├── Interfaces/     # Service contracts
-├── Services/       # Business logic (WIP)
-├── Config/         # Policy constants (WIP)
-├── UI/             # Console output helpers (WIP)
-└── Program.cs      # Entry point / demo scenario
+├── Services/       # Business logic
+├── Config/         # Policy constants
+├── UI/             # Console output helpers
+└── Program.cs      # Entry point
 ```
 
 ## How to run
@@ -24,6 +24,3 @@ EquipmentRental/
 dotnet run --project EquipmentRental
 ```
 
-## Design decisions
-
-TBD — will be filled in as the implementation progresses.
