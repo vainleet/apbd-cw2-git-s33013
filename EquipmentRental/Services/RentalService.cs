@@ -1,4 +1,5 @@
 using EquipmentRental.Config;
+using EquipmentRental.Data;
 using EquipmentRental.Interfaces;
 using EquipmentRental.Models;
 
@@ -6,9 +7,9 @@ namespace EquipmentRental.Services;
 
 public class RentalService : IRentalService
 {
-    private readonly List<User> _users = new();
-    private readonly List<Equipment> _equipment = new();
-    private readonly List<Rental> _rentals = new();
+    private readonly List<User> _users = DataStore.Users;
+    private readonly List<Equipment> _equipment = DataStore.Equipments;
+    private readonly List<Rental> _rentals = DataStore.Rentals;
 
     public void AddUser(User user)
     {
