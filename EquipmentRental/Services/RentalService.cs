@@ -92,7 +92,29 @@ public class RentalService : IRentalService
 
     public List<Rental> GetAllRentals() => new(_rentals);
 
-    public string GenerateSummaryReport() => "Report — coming in next commit.";
+    public string GenerateSummaryReport()
+    {
+        int available = _equipment.Count(e => e.IsAvailable);
+        int active    = _rentals.Count(r => r.IsActive);
+        int overdue   = GetOverdueRentals().Count;
+        decimal totalPenalties = _rentals.Sum(r => r.Penalty);
+        int students  = _users.OfType<Student>().Count();
+        int employees = _users.OfType<Employee>().Count();
+
+        return $"""
+            ╔══════════════════════════════════════════════╗
+            ║     UNIVERSITY EQUIPMENT RENTAL — REPORT     ║
+            ╠══════════════════════════════════════════════╣
+            ║  Equipment total     : {_equipment.Count,-4}                   ║
+            ║  Available           : {available,-4}                   ║
+            ║  Rented out          : {_equipment.Count - available,-4}                   ║
+            ║  Active rentals      : {active,-4}                   ║
+            ║  Overdue rentals     : {overdue,-4}                   ║
+            ║  Registered users    : {_users.Count,-4} (S:{students} / E:{employees})   ║
+            ║  Total penalties     : {totalPenalties,-6} PLN               ║
+            ╚══════════════════════════════════════════════╝
+            """;
+    }
 
     private User FindUser(Guid id) =>
         _users.FirstOrDefault(u => u.Id == id)

@@ -6,4 +6,7 @@ public class Projector : Equipment
     public string Resolution { get; set; } = string.Empty;
 
     public override string TypeLabel => "Projector";
+
+    public override string ToString() =>
+        base.ToString() + $" | Lumens: {Lumens}, Resolution: {Resolution}";
 }
